@@ -7,5 +7,5 @@ target 'Kuzi' do
 
   # Pods for Kuzi
   pod 'Anchors'  
-
+  pod 'Parchment'
 end

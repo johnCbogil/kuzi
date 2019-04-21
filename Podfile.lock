@@ -1,16 +1,20 @@
 PODS:
   - Anchors (2.4.0)
+  - Parchment (1.5.0)
 
 DEPENDENCIES:
   - Anchors
+  - Parchment
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Anchors
+    - Parchment
 
 SPEC CHECKSUMS:
   Anchors: 75614cac462e063b395386e31eb593a856d831a8
+  Parchment: 5a8c9c73549a6d73a7c1b606c27246910d2e5720
 
-PODFILE CHECKSUM: ede9d3c38860243bdea3f9bcc8ee3b247b42e14f
+PODFILE CHECKSUM: 38f7290e582778735efd8e6a0bf611aec708d8ed
 
 COCOAPODS: 1.6.1

@@ -9,7 +9,7 @@
 import UIKit
 import Anchors
 
-class ViewController: UIViewController {
+class RecsVC: UIViewController {
 
     // MARK: - PROPERTIES
     private lazy var selectedBeers = [String]()
@@ -130,10 +130,10 @@ class ViewController: UIViewController {
     }
 
     private func getRecommendations() {
-//        let Url = String(format: "https://safe-beach-47162.herokuapp.com/predict")
         let Url = String(format: "https://safe-beach-47162.herokuapp.com/predict")
         guard let serviceUrl = URL(string: Url) else { return }
-        let parameterDictionary = ["userId" : ["101010"], "beer_name" : ["Founders CBS Imperial Stout"]]
+        let parameterDictionary = ["userId": ["101010","101010","101010"], "beer_name": ["Stoudts American Pale Ale","Founders KBS (Kentucky Breakfast Stout)","Founders CBS Imperial Stout"]]
+
         var request = URLRequest(url: serviceUrl)
         request.httpMethod = "POST"
         request.setValue("Application/json", forHTTPHeaderField: "Content-Type")
@@ -208,7 +208,7 @@ class ViewController: UIViewController {
 
 }
 
-extension ViewController: UISearchBarDelegate {
+extension RecsVC: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("search")
@@ -221,7 +221,7 @@ extension ViewController: UISearchBarDelegate {
 
 }
 
-extension ViewController: UITableViewDataSource, UITableViewDelegate {
+extension RecsVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.selectedBeers.count
     }

@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B04E57B5DDB8396FFF2D7437473D07A8"
-               BuildableName = "Pods-Kuzi.framework"
-               BlueprintName = "Pods-Kuzi"
+               BlueprintIdentifier = "ADBC1E7973225C6E0DA4A238923C5086"
+               BuildableName = "Parchment.framework"
+               BlueprintName = "Parchment"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

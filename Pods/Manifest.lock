@@ -1,0 +1,16 @@
+PODS:
+  - Anchors (2.4.0)
+
+DEPENDENCIES:
+  - Anchors
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Anchors
+
+SPEC CHECKSUMS:
+  Anchors: 75614cac462e063b395386e31eb593a856d831a8
+
+PODFILE CHECKSUM: ede9d3c38860243bdea3f9bcc8ee3b247b42e14f
+
+COCOAPODS: 1.6.1

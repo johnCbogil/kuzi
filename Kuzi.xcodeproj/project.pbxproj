@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		521566EA226D536100EF8DBA /* BeerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521566E9226D536100EF8DBA /* BeerManager.swift */; };
+		5255AC1D226D39F700F7C8BB /* BeerListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255AC1C226D39F700F7C8BB /* BeerListVC.swift */; };
+		5255AC1F226D3F6300F7C8BB /* beerNames.csv in Resources */ = {isa = PBXBuildFile; fileRef = 5255AC1E226D3F6300F7C8BB /* beerNames.csv */; };
+		5255AC21226D425A00F7C8BB /* CSwiftV.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255AC20226D425500F7C8BB /* CSwiftV.swift */; };
 		5258058A225ABD3E00FCC98D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52580589225ABD3E00FCC98D /* AppDelegate.swift */; };
 		5258058C225ABD3E00FCC98D /* RecsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5258058B225ABD3E00FCC98D /* RecsVC.swift */; };
 		52580591225ABD3F00FCC98D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52580590225ABD3F00FCC98D /* Assets.xcassets */; };
@@ -20,6 +24,10 @@
 		043FC3C85B8C4AC4D6302DC3 /* Pods-Kuzi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kuzi.release.xcconfig"; path = "Target Support Files/Pods-Kuzi/Pods-Kuzi.release.xcconfig"; sourceTree = "<group>"; };
 		0E40FF8CFABC8535BDEC841C /* Pods-Kuzi.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Kuzi.debug.xcconfig"; path = "Target Support Files/Pods-Kuzi/Pods-Kuzi.debug.xcconfig"; sourceTree = "<group>"; };
 		4C565890D4E5134E706301D8 /* Pods_Kuzi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Kuzi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		521566E9226D536100EF8DBA /* BeerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerManager.swift; sourceTree = "<group>"; };
+		5255AC1C226D39F700F7C8BB /* BeerListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListVC.swift; sourceTree = "<group>"; };
+		5255AC1E226D3F6300F7C8BB /* beerNames.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = beerNames.csv; sourceTree = "<group>"; };
+		5255AC20226D425500F7C8BB /* CSwiftV.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSwiftV.swift; sourceTree = "<group>"; };
 		52580586225ABD3E00FCC98D /* Kuzi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Kuzi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52580589225ABD3E00FCC98D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5258058B225ABD3E00FCC98D /* RecsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecsVC.swift; sourceTree = "<group>"; };
@@ -78,6 +86,10 @@
 				52580590225ABD3F00FCC98D /* Assets.xcassets */,
 				52580592225ABD3F00FCC98D /* LaunchScreen.storyboard */,
 				52580595225ABD3F00FCC98D /* Info.plist */,
+				5255AC1C226D39F700F7C8BB /* BeerListVC.swift */,
+				5255AC20226D425500F7C8BB /* CSwiftV.swift */,
+				5255AC1E226D3F6300F7C8BB /* beerNames.csv */,
+				521566E9226D536100EF8DBA /* BeerManager.swift */,
 			);
 			path = Kuzi;
 			sourceTree = "<group>";
@@ -153,6 +165,7 @@
 			files = (
 				52580594225ABD3F00FCC98D /* LaunchScreen.storyboard in Resources */,
 				52580591225ABD3F00FCC98D /* Assets.xcassets in Resources */,
+				5255AC1F226D3F6300F7C8BB /* beerNames.csv in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,12 +204,14 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Kuzi/Pods-Kuzi-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Anchors/Anchors.framework",
+				"${BUILT_PRODUCTS_DIR}/Parchment/Parchment.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Anchors.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Parchment.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -213,7 +228,10 @@
 				52A5CE7A22600898000C46E7 /* Response.swift in Sources */,
 				5258058C225ABD3E00FCC98D /* RecsVC.swift in Sources */,
 				5258059E225ADC5900FCC98D /* ResultsVC.swift in Sources */,
+				5255AC1D226D39F700F7C8BB /* BeerListVC.swift in Sources */,
+				5255AC21226D425A00F7C8BB /* CSwiftV.swift in Sources */,
 				5258058A225ABD3E00FCC98D /* AppDelegate.swift in Sources */,
+				521566EA226D536100EF8DBA /* BeerManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

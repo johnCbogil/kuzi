@@ -8,11 +8,12 @@
 
 import UIKit
 import Anchors
+import Parchment
 
 class RecsVC: UIViewController {
 
     // MARK: - PROPERTIES
-    private lazy var selectedBeers = [String]()
+//    private lazy var selectedBeers = [String]()
     private lazy var resultBeers = [Beer]()
 
     // MARK: - VIEWS
@@ -55,14 +56,6 @@ class RecsVC: UIViewController {
         return button
     }()
 
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.sectionFooterHeight = .zero
-        return tableView
-    }()
-
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.delegate = self
@@ -77,8 +70,20 @@ class RecsVC: UIViewController {
         button.setImage(#imageLiteral(resourceName: "Image"), for: .normal)
         button.tintColor = UIColor.gray.withAlphaComponent(0.5)
         button.addTarget(self, action: #selector(infoButtonDidPress), for: .touchUpInside)
-
         return button
+    }()
+
+    private lazy var selectedBeersVC = BeerListVC()
+    private lazy var allBeersVC = BeerListVC()
+
+    private lazy var pageVC: FixedPagingViewController = {
+        selectedBeersVC.title = "Selected Beers"
+        allBeersVC.title = "All Beers"
+        allBeersVC.beerList = BeerManager.shared.getBeersFromCSV()
+        allBeersVC.beerList.sort()
+        allBeersVC.tableView.reloadData()
+        let pageVC = FixedPagingViewController(viewControllers: [allBeersVC, selectedBeersVC])
+        return pageVC
     }()
 
     // MARK: - LIFECYCLE
@@ -92,7 +97,7 @@ class RecsVC: UIViewController {
             subtitleLabel,
             instructionLabel,
             searchBar,
-            tableView,
+            pageVC.view,
             getRecommendationsButton,
             infoButton
             ])
@@ -114,9 +119,9 @@ class RecsVC: UIViewController {
             self.searchBar.anchor.leading.constant(10),
             self.searchBar.anchor.trailing.to(self.infoButton.anchor.leading).constant(-5),
 
-            self.tableView.anchor.top.to(self.searchBar.anchor.bottom).constant(10),
-            self.tableView.anchor.paddingHorizontally(0),
-            self.tableView.anchor.height.equal.to(300),
+            self.pageVC.view.anchor.top.to(self.searchBar.anchor.bottom).constant(10),
+            self.pageVC.view.anchor.paddingHorizontally(0),
+            self.pageVC.view.anchor.bottom.to(self.getRecommendationsButton.anchor.top).constant(-30),
 
             self.getRecommendationsButton.anchor.centerX,
             self.getRecommendationsButton.anchor.paddingHorizontally(20),
@@ -128,6 +133,7 @@ class RecsVC: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
+
 
     private func getRecommendations() {
         let Url = String(format: "https://safe-beach-47162.herokuapp.com/predict")
@@ -180,7 +186,6 @@ class RecsVC: UIViewController {
 
     @objc private func getRecommendationsButtonDidPress() {
         getRecommendations()
-
     }
 
     @objc private func infoButtonDidPress() {
@@ -213,30 +218,10 @@ extension RecsVC: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("search")
         guard let text = searchBar.text else { return }
-        self.selectedBeers.append(text)
-        self.tableView.reloadData()
+        self.selectedBeersVC.beerList.append(text)
+        self.selectedBeersVC.tableView.reloadData()
         self.searchBar.text = ""
         searchBar.resignFirstResponder()
-    }
-
-}
-
-extension RecsVC: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.selectedBeers.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = self.selectedBeers[indexPath.row]
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            self.selectedBeers.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .fade)
-        }
     }
 
 }

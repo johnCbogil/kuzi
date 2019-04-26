@@ -28,20 +28,14 @@ class BeerListVC: UIViewController {
         return tableView
     }()
 
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-
     init(pageVCTab: PageVCTab) {
         self.pageVCTab = pageVCTab
-        super.init()
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-
 
 
     // MARK: - VIEW LIFECYCLE
@@ -52,6 +46,18 @@ class BeerListVC: UIViewController {
         activate(
             self.tableView.anchor.edges.toSafeLayoutGuide(self.view)
         )
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.pageVCTab == .selectedBeeers {
+            self.beerList = BeerManager.shared.selectedBeers
+            self.tableView.reloadData()
+        }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
 }
@@ -69,6 +75,9 @@ extension BeerListVC: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
-        BeerManager.shared.selectedBeers.append(self.beerList[indexPath.row])
+        if self.pageVCTab == .allBeers {
+            BeerManager.shared.selectedBeers.append(self.beerList[indexPath.row])
+            self.tableView.reloadData()
+        }
     }
 }

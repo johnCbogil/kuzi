@@ -73,8 +73,8 @@ class RecsVC: UIViewController {
         return button
     }()
 
-    private lazy var selectedBeersVC = BeerListVC()
-    private lazy var allBeersVC = BeerListVC()
+    private lazy var selectedBeersVC = BeerListVC.init(pageVCTab: .selectedBeeers)
+    private lazy var allBeersVC = BeerListVC.init(pageVCTab: .allBeers)
 
     private lazy var pageVC: FixedPagingViewController = {
         selectedBeersVC.title = "Selected Beers"
@@ -138,7 +138,19 @@ class RecsVC: UIViewController {
     private func getRecommendations() {
         let Url = String(format: "https://safe-beach-47162.herokuapp.com/predict")
         guard let serviceUrl = URL(string: Url) else { return }
-        let parameterDictionary = ["userId": ["101010","101010","101010"], "beer_name": ["Stoudts American Pale Ale","Founders KBS (Kentucky Breakfast Stout)","Founders CBS Imperial Stout"]]
+
+        var usernameArray = [String]()
+        // create an array with duplicate usernames, N times as long as the beerCount
+        for beer in BeerManager.shared.selectedBeers {
+            usernameArray.append("101010")
+        }
+
+
+
+
+
+
+        let parameterDictionary = ["userId": ["101010","101010","101010"], "beer_name": ["Bourbon Chaos","Four O Ice Beer","Krugbier"]]
 
         var request = URLRequest(url: serviceUrl)
         request.httpMethod = "POST"
@@ -190,7 +202,7 @@ class RecsVC: UIViewController {
 
     @objc private func infoButtonDidPress() {
 
-        let alert = UIAlertController(title: "Alert", message: "Message", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Alert", message: "Must be 3 unique beers.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             switch action.style{
             case .default:

@@ -28,6 +28,12 @@ class BeerListVC: UIViewController {
         return tableView
     }()
 
+    private lazy var lightHapticGenerator: UIImpactFeedbackGenerator = {
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        return generator
+    }()
+
+    // MARK: - INIT
     init(pageVCTab: PageVCTab) {
         self.pageVCTab = pageVCTab
         super.init(nibName: nil, bundle: nil)
@@ -60,6 +66,40 @@ class BeerListVC: UIViewController {
         super.viewDidAppear(animated)
     }
 
+    private func presentBeerCountAlert() {
+        let alert = UIAlertController(title: "Alert", message: "Must be 3 unique beers.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style{
+            case .default:
+                print("default")
+
+            case .cancel:
+                print("cancel")
+
+            case .destructive:
+                print("destructive")
+
+            @unknown default:
+                fatalError()
+            }
+        }
+            )
+        )
+        self.present(alert, animated: true, completion: nil)
+    }
+
+    func filterAllBeers(with text: String) {
+        if text.count > 0 {
+            let allBeers = BeerManager.shared.allBeers
+            let filteredList = allBeers.filter({$0.lowercased().contains(text.lowercased())})
+            self.beerList = filteredList
+            self.tableView.reloadData()
+        } else {
+            self.beerList = BeerManager.shared.allBeers
+            self.beerList.sort()
+            self.tableView.reloadData()
+        }
+    }
 }
 
 extension BeerListVC: UITableViewDelegate, UITableViewDataSource {
@@ -75,9 +115,35 @@ extension BeerListVC: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.tableView.deselectRow(at: indexPath, animated: true)
+        self.lightHapticGenerator.impactOccurred()
+
+        // Prevent duplicates
         if self.pageVCTab == .allBeers {
-            BeerManager.shared.selectedBeers.append(self.beerList[indexPath.row])
-            self.tableView.reloadData()
+            let selectedBeer = self.beerList[indexPath.row]
+            if BeerManager.shared.selectedBeers.contains(selectedBeer) {
+                return
+            }
+        }
+
+        // Add beers to selected Beers tab
+        if BeerManager.shared.selectedBeers.count < 3 {
+            if self.pageVCTab == .allBeers {
+                BeerManager.shared.selectedBeers.append(self.beerList[indexPath.row])
+                self.tableView.reloadData()
+            }
+        } else {
+            self.presentBeerCountAlert()
+        }
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+            if editingStyle == .delete {
+                //            EntriesManager.shared.entriesArray.remove(at: indexPath.row)
+                BeerManager.shared.selectedBeers.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .fade)
+                //            self.configureStreakCount()
+                self.lightHapticGenerator.impactOccurred()
+
         }
     }
 }

@@ -13,7 +13,7 @@ import Parchment
 class RecsVC: UIViewController {
 
     // MARK: - PROPERTIES
-//    private lazy var selectedBeers = [String]()
+    //    private lazy var selectedBeers = [String]()
     private lazy var resultBeers = [Beer]()
 
     // MARK: - VIEWS
@@ -37,7 +37,7 @@ class RecsVC: UIViewController {
 
     private lazy var instructionLabel: UILabel = {
         let label = UILabel()
-        label.text = "To get started, let us know which beers you like"
+        label.text = "To get started, select which beers you like"
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -73,6 +73,18 @@ class RecsVC: UIViewController {
         return button
     }()
 
+    private lazy var activityView: UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView(style: .whiteLarge)
+        view.color = .gray
+        view.hidesWhenStopped = true
+        return view
+    }()
+
+    private lazy var heavyHapticGenerator: UIImpactFeedbackGenerator = {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        return generator
+    }()
+
     private lazy var selectedBeersVC = BeerListVC.init(pageVCTab: .selectedBeeers)
     private lazy var allBeersVC = BeerListVC.init(pageVCTab: .allBeers)
 
@@ -99,7 +111,8 @@ class RecsVC: UIViewController {
             searchBar,
             pageVC.view,
             getRecommendationsButton,
-            infoButton
+            infoButton,
+            activityView
             ])
         activate(
             self.titleLabel.anchor.top.toSafeLayoutGuide(self.view),
@@ -125,7 +138,9 @@ class RecsVC: UIViewController {
 
             self.getRecommendationsButton.anchor.centerX,
             self.getRecommendationsButton.anchor.paddingHorizontally(20),
-            self.getRecommendationsButton.anchor.bottom.toSafeLayoutGuide(self.view).constant(-20)
+            self.getRecommendationsButton.anchor.bottom.toSafeLayoutGuide(self.view).constant(-20),
+
+            self.activityView.anchor.edges
         )
     }
 
@@ -140,17 +155,7 @@ class RecsVC: UIViewController {
         guard let serviceUrl = URL(string: Url) else { return }
 
         var usernameArray = [String]()
-        // create an array with duplicate usernames, N times as long as the beerCount
-        for beer in BeerManager.shared.selectedBeers {
-            usernameArray.append("101010")
-        }
-
-
-
-
-
-
-        let parameterDictionary = ["userId": ["101010","101010","101010"], "beer_name": ["Bourbon Chaos","Four O Ice Beer","Krugbier"]]
+        let parameterDictionary = ["userId": ["101010","101010","101010"], "beer_name": BeerManager.shared.selectedBeers]
 
         var request = URLRequest(url: serviceUrl)
         request.httpMethod = "POST"
@@ -173,16 +178,37 @@ class RecsVC: UIViewController {
                     let resultsVC = ResultsVC()
                     resultsVC.testArray = self.resultBeers
                     DispatchQueue.main.async {
+                        self.activityView.stopAnimating()
                         self.navigationController?.pushViewController(resultsVC, animated: true)
                     }
 
-
                 } catch {
-                    print(error)
+                    DispatchQueue.main.async {
+                        self.activityView.stopAnimating()
+                        print(error)
+                        let alert = UIAlertController(title: "Alert", message: "Error", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                            switch action.style{
+                            case .default:
+                                print("default")
+
+                            case .cancel:
+                                print("cancel")
+
+                            case .destructive:
+                                print("destructive")
+
+                            @unknown default:
+                                fatalError()
+                            }
+                        }
+                            )
+                        )
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             }
             }.resume()
-
     }
 
     func convertToDictionary(text: String) -> [String: Any]? {
@@ -197,6 +223,8 @@ class RecsVC: UIViewController {
     }
 
     @objc private func getRecommendationsButtonDidPress() {
+        self.activityView.startAnimating()
+        self.heavyHapticGenerator.impactOccurred()
         getRecommendations()
     }
 
@@ -230,10 +258,15 @@ extension RecsVC: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("search")
         guard let text = searchBar.text else { return }
-        self.selectedBeersVC.beerList.append(text)
+        //        self.selectedBeersVC.beerList.append(text)
         self.selectedBeersVC.tableView.reloadData()
         self.searchBar.text = ""
         searchBar.resignFirstResponder()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(searchText)
+        self.allBeersVC.filterAllBeers(with: searchText)
     }
 
 }
